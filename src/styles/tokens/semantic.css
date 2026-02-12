@@ -1,0 +1,3 @@
+:root {
+  --primary-light: rgb(var(--color-primary) / 0.12);
+}

@@ -1,0 +1,111 @@
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+
+/* Button Primary */
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-gaWhite);
+}
+
+.btn-primary-dark {
+  background: var(--color-primary-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-primary-light {
+  background: var(--color-primary-light);
+  color: var(--color-gaWhite);
+}
+
+/* Button Secondary */
+
+.btn-secondary-dark {
+  background: var(--color-secondary-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-secondary {
+  background: var(--color-secondary-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-secondary-light {
+  background: var(--color-secondary-light);
+  color: var(--color-gaWhite);
+}
+
+
+/* Button Sucess */
+
+.btn-success-dark {
+  background: var(--color-success-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-success {
+  background: var(--color-success);
+  color: var(--color-gaWhite);
+}
+
+.btn-success-light {
+  background: var(--color-success-light);
+  color: var(--color-gaWhite);
+}
+
+
+/* Button Info */
+
+.btn-info-dark {
+  background: var(--color-info-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-info {
+  background: var(--color-info);
+  color: var(--color-gaWhite);
+}
+
+.btn-info-light {
+  background: var(--color-info-light);
+  color: var(--color-gaWhite);
+}
+
+
+/* Button Warning */
+
+.btn-warning-dark {
+  background: var(--color-warning-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-warning {
+
+  background: var(--color-warning);
+  color: var(--color-gaWhite);
+}
+
+.btn-warning-light {
+  background: var(--color-warning-light);
+  color: var(--color-gaWhite);
+}
+
+/* Button Danger */
+
+.btn-danger-dark {
+  background: var(--color-danger-dark);
+  color: var(--color-gaWhite);
+}
+
+.btn-danger {
+
+  background: var(--color-danger);
+  color: var(--color-gaWhite);
+}
+
+.btn-danger-light {
+  background: var(--color-danger-light);
+  color: var(--color-gaWhite);
+}
