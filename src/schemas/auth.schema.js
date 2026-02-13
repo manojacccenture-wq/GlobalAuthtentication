@@ -1,13 +1,14 @@
 import { z } from "zod";
 
 export const signInSchema = z.object({
-  email: z
+  username: z
     .string()
-    .min(3, "Email is required")
-    .max(255, "Email is required")
-    .email("Invalid email format"),
+    .regex(
+      /^[A-Z]{3}-\d{3}$/,
+      "Username must be in format: AAA-999 (e.g., ADM-001)"
+    ),
 
   password: z
     .string()
-     .min(8, "Password must be at least 8 characters")
+    .min(8, "Password must be at least 8 characters"),
 });

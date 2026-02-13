@@ -26,7 +26,7 @@ const SignIn = () => {
     resolver: zodResolver(signInSchema),
     mode: "onTouched",
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
       rememberMe: false,
     },
@@ -39,15 +39,17 @@ const SignIn = () => {
   const onSubmit = (data) => {
 
     const user = testUsers.find(
-      (u) => u.email === data.email && u.password === data.password
+      (u) => u.username === data.username && u.password === data.password
     );
+
 
     if (user) {
 
       // Simulate OTP generation
       const generatedOtp = "123456";
       localStorage.setItem("otp", generatedOtp);
-      localStorage.setItem("mfaEmail", user.email);
+      localStorage.setItem("mfaUser", user.username);
+
 
       login(user);
       navigate("/mfa");
@@ -85,12 +87,17 @@ const SignIn = () => {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="flex flex-col gap-[20px] mb-[20px]">
             <Input
-              type="email"
-              placeholder="Email"
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              {...register("email")}
+              type="text"
+              placeholder="ADM-001"
+              error={!!errors.username}
+              helperText={errors.username?.message}
+              {...register("username")}
+              onChange={(e) =>
+                setValue("username", e.target.value.toUpperCase())
+              }
             />
+
+
             <Input
               type="password"
               placeholder="Password"
@@ -118,12 +125,12 @@ const SignIn = () => {
             >
               {isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
-            <p className="text-[16px] font-normal leading-[20px] text-[#3a3f51] text-center font-['Outfit',sans-serif]">
-              <a href="#" className="text-[#00bfa6] hover:underline">
+            <p className=" font-normal  text-[#3a3f51] text-center ">
+              <a href="#" className="text-text-primary hover:underline">
                 Forgot password?
               </a>
 
-              <span className="mx-2">|</span>
+              {/* <span className="mx-2">|</span>
 
               Don’t have an account?{" "}
               <Link
@@ -131,7 +138,7 @@ const SignIn = () => {
                 className="text-[#00bfa6] font-medium hover:underline"
               >
                 Sign Up
-              </Link>
+              </Link> */}
             </p>
 
 
