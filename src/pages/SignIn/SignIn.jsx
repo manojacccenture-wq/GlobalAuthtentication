@@ -54,8 +54,15 @@ const SignIn = () => {
 
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center px-[20px]">
-      <div className="w-full max-w-[20%]">
+ <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+
+<div className="w-full 
+                max-w-sm 
+                sm:max-w-md 
+                md:max-w-lg 
+                lg:max-w-xl 
+                mx-auto">
+
         <div className="flex items-center justify-center gap-[5.208px] mb-[82px]">
           <svg
             className="w-[46px] h-[46px]"
