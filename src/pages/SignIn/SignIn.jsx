@@ -8,11 +8,14 @@ import Checkbox from '../../components/UI/CheckBox/Checkbox';
 import { useForm } from 'react-hook-form';
 import { signInSchema } from '../../schemas/auth.schema';
 import { testUsers } from '../../utils/constants/users';
+import { useAuth } from '../../Context/AuthContext';
 
 
 const SignIn = () => {
 
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -46,7 +49,9 @@ const SignIn = () => {
       localStorage.setItem("otp", generatedOtp);
       localStorage.setItem("mfaEmail", user.email);
 
+      login(user);
       navigate("/mfa");
+
     } else {
       alert("Invalid credentials");
     }
@@ -54,9 +59,9 @@ const SignIn = () => {
 
 
   return (
- <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
 
-<div className="w-full 
+      <div className="w-full 
                 max-w-sm 
                 sm:max-w-md 
                 md:max-w-lg 
