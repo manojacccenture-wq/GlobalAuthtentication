@@ -65,7 +65,7 @@ const SignIn = () => {
                 max-w-sm 
                 sm:max-w-md 
                 md:max-w-lg 
-                lg:max-w-xl 
+                lg:max-w-md 
                 mx-auto">
 
         <div className="flex items-center justify-center gap-[5.208px] mb-[82px]">
