@@ -1,5 +1,5 @@
 .btn {
-  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  @apply font-medium transition-all duration-200 rounded-lg;
 }
 
 
@@ -16,9 +16,10 @@
 }
 
 .btn-primary-light {
-  background: var(--color-primary-light);
-  color: var(--color-gaWhite);
+ background: rgba(var(--color-primary-light), 0.12);
+  color: rgb(var(--color-primary-light));
 }
+
 
 /* Button Secondary */
 
@@ -28,13 +29,13 @@
 }
 
 .btn-secondary {
-  background: var(--color-secondary-dark);
+  background: var(--color-secondary);
   color: var(--color-gaWhite);
 }
 
 .btn-secondary-light {
-  background: var(--color-secondary-light);
-  color: var(--color-gaWhite);
+   background: rgba(var(--color-secondary-light), 0.00);
+  color: rgb(var(--color-secondary-light));
 }
 
 
@@ -51,8 +52,8 @@
 }
 
 .btn-success-light {
-  background: var(--color-success-light);
-  color: var(--color-gaWhite);
+   background: rgba(var(--color-primary-light), 0.12);
+  color: rgb(var(--color-primary-light));
 }
 
 
@@ -69,8 +70,8 @@
 }
 
 .btn-info-light {
-  background: var(--color-info-light);
-  color: var(--color-gaWhite);
+   background: rgba(var(--color-info-light), 0.12);
+  color: rgb(var(--color-info-light));
 }
 
 
@@ -88,8 +89,8 @@
 }
 
 .btn-warning-light {
-  background: var(--color-warning-light);
-  color: var(--color-gaWhite);
+  background: rgba(var(--color-warning-light), 100);
+  color: rgb(var(--color-warning));
 }
 
 /* Button Danger */
@@ -106,6 +107,6 @@
 }
 
 .btn-danger-light {
-  background: var(--color-danger-light);
-  color: var(--color-gaWhite);
+   background: rgba(var(--color-danger-light), 0.12);
+  color: rgb(var(--color-danger-light));
 }
