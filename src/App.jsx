@@ -1,29 +1,40 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import PublicRoute from "./routes/PublicRoute";
+
 
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/signup/SignUp";
 import MFA from "./pages/MFA/MFA";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import MFARoute from "./routes/MFARoute";
+
+import ForgotPassword from "./pages/ForogotPassword/ForgotPassword";
+
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import AccessDenied from "./pages/AccessDenied/AccessDenied";
+
+import RouteGuard from "./routes/RouteGuard";
+import Loader from "./components/Common/Loader/Loader";
 
 const App = () => {
   return (
     <AuthProvider>
-      <Routes>
+      <Suspense fallback={<Loader size="lg" variant="primary" />}>
+        <Routes>
 
-        <Route path="/" element={<PublicRoute> <SignIn /> </PublicRoute>} />
+          <Route path="/" element={<RouteGuard requirePublic><SignIn /></RouteGuard>} />
 
-        <Route path="/signup" element={<PublicRoute> <SignUp /></PublicRoute>} />
+          <Route path="/signup" element={<RouteGuard requirePublic><SignUp /></RouteGuard>} />
 
-        <Route path="/mfa" element={<MFARoute><MFA /></MFARoute>}/>
+          <Route path="/mfa" element={<RouteGuard requireMfa><MFA /></RouteGuard>} />
 
 
-        <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<RouteGuard requireAuth allowedRoles={["superadmin", "admin", "user", "supervisor"]}><Dashboard /></RouteGuard>} />
+          <Route path="/forgotPassword" element={<RouteGuard requirePublic><ForgotPassword /></RouteGuard>} />
+          <Route path="/reset-password" element={<RouteGuard requireResetState><ResetPassword /></RouteGuard>} />
+          <Route path="/access-denied" element={<AccessDenied />} />
 
-      </Routes>
+        </Routes>
+      </Suspense>
     </AuthProvider>
   );
 };

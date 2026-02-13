@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -38,6 +38,7 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
 
+
     const user = testUsers.find(
       (u) => u.username === data.username && u.password === data.password
     );
@@ -48,6 +49,7 @@ const SignIn = () => {
       // Simulate OTP generation
       const generatedOtp = "123456";
       localStorage.setItem("otp", generatedOtp);
+      localStorage.setItem("mfaEmail", user.email);
       localStorage.setItem("mfaUser", user.username);
 
 
@@ -58,6 +60,10 @@ const SignIn = () => {
       alert("Invalid credentials");
     }
   };
+
+  const handleNavigateForgotPassword=()=>{
+    navigate("/forgotPassword");
+  }
 
 
   return (
@@ -126,7 +132,7 @@ const SignIn = () => {
               {isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
             <p className=" font-normal  text-[#3a3f51] text-center ">
-              <a href="#" className="text-text-primary hover:underline">
+              <a href="#" className="text-text-primary hover:underline" onClick={handleNavigateForgotPassword}>
                 Forgot password?
               </a>
 
