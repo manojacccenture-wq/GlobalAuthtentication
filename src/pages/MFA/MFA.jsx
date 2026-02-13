@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../Context/AuthContext";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 
 const MFA = () => {
   const navigate = useNavigate();
+  const { user, mfaPending, verifyMfa } = useAuth();
 
   const {
     register,
@@ -17,68 +19,77 @@ const MFA = () => {
     }
   });
 
-  const email = localStorage.getItem("mfaEmail");
+  // 🚨 Prevent direct access
+  useEffect(() => {
+    if (!user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
+
+  const username = user?.username || localStorage.getItem("mfaUser");
 
   const onSubmit = (data) => {
     const storedOtp = localStorage.getItem("otp");
 
     if (data.otp === storedOtp) {
-   
+
       localStorage.removeItem("otp");
-      localStorage.removeItem("mfaEmail");
+      localStorage.removeItem("mfaUser");
+
+      verifyMfa(); // ✅ important
       navigate("/dashboard");
+
     } else {
       alert("Invalid OTP ❌");
     }
   };
 
- return (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10">
 
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4 sm:mb-6">
-        Verify Code
-      </h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4 sm:mb-6">
+          Verify Code
+        </h2>
 
-      <p className="text-center text-xs sm:text-sm text-gray-500 mb-2">
-        OTP sent to <span className="font-medium">{email}</span>
-      </p>
+        <p className="text-center text-xs sm:text-sm text-gray-500 mb-2">
+          OTP sent to <span className="font-medium">{username}</span>
+        </p>
 
-      <p className="text-center text-xs sm:text-sm text-gray-500 mb-6 sm:mb-8">
-        Enter the 6-digit code sent to your email
-      </p>
+        <p className="text-center text-xs sm:text-sm text-gray-500 mb-6 sm:mb-8">
+          Enter the 6-digit code
+        </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
 
-        <Input
-          type="text"
-          placeholder="Enter 6 digit OTP"
-          error={!!errors.otp}
-          helperText={errors.otp?.message}
-          {...register("otp", {
-            required: "OTP is required",
-            minLength: {
-              value: 6,
-              message: "OTP must be 6 digits"
-            }
-          })}
-        />
+          <Input
+            type="text"
+            placeholder="Enter 6 digit OTP"
+            error={!!errors.otp}
+            helperText={errors.otp?.message}
+            {...register("otp", {
+              required: "OTP is required",
+              pattern: {
+                value: /^\d{6}$/,
+                message: "OTP must be exactly 6 digits"
+              }
+            })}
+          />
 
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          className="w-full"
-        >
-          Verify OTP
-        </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            className="w-full"
+          >
+            Verify OTP
+          </Button>
 
-      </form>
+        </form>
 
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default MFA;
