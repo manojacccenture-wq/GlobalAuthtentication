@@ -42,7 +42,7 @@ const ForgotPassword = () => {
     );
 
     if (!user) {
-      return alert("User not found ❌");
+      return alert("User not found ");
     }
 
     if (!user.isForgotPassword) {
@@ -58,8 +58,8 @@ const ForgotPassword = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10">
+    <div className="min-h-screen flex items-center justify-center  px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md  rounded-2xl  p-6 sm:p-8 md:p-10">
 
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4">
           Forgot Password
