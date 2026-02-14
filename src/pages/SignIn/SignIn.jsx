@@ -36,30 +36,35 @@ const SignIn = () => {
 
   const rememberMe = watch("rememberMe");
 
-  const onSubmit = (data) => {
+const onSubmit = (data) => {
+  const user = testUsers.find(
+    (u) =>
+      u.username === data.username &&
+      u.password === data.password
+  );
 
+  if (!user) {
+    alert("Invalid credentials ");
+    return;
+  }
 
-    const user = testUsers.find(
-      (u) => u.username === data.username && u.password === data.password
-    );
+  // Login user first
+  login(user);
 
+  //  If Two Factor Enabled
+  if (user.isTwoFactor) {
+    const generatedOtp = "123456";
 
-    if (user) {
+    localStorage.setItem("otp", generatedOtp);
+    localStorage.setItem("mfaUser", user.username);
 
-      // Simulate OTP generation
-      const generatedOtp = "123456";
-      localStorage.setItem("otp", generatedOtp);
-      localStorage.setItem("mfaEmail", user.email);
-      localStorage.setItem("mfaUser", user.username);
+    navigate("/mfa");
+  } else {
+    //  Direct access to dashboard
+    navigate("/dashboard");
+  }
+};
 
-
-      login(user);
-      navigate("/mfa");
-
-    } else {
-      alert("Invalid credentials");
-    }
-  };
 
   const handleNavigateForgotPassword=()=>{
     navigate("/forgotPassword");
