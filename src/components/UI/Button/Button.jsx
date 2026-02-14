@@ -15,7 +15,7 @@ const Button = React.forwardRef(
         ref
     ) => {
         const baseClasses =
-            "btn inline-flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50";
+            "btn inline-flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer";
 
         const variants = {
             primary: "btn-primary",

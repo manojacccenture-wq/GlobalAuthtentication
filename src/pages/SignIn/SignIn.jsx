@@ -32,134 +32,126 @@ const SignIn = () => {
     },
   });
 
-
-
   const rememberMe = watch("rememberMe");
 
-const onSubmit = (data) => {
-  const user = testUsers.find(
-    (u) =>
-      u.username === data.username &&
-      u.password === data.password
-  );
 
-  if (!user) {
-    alert("Invalid credentials ");
-    return;
-  }
+  const onSubmit = (data) => {
+    const user = testUsers.find(
+      (u) =>
+        u.username === data.username &&
+        u.password === data.password
+    );
 
-  // Login user first
-  login(user);
+    if (!user) {
+      alert("Invalid credentials ");
+      return;
+    }
 
-  //  If Two Factor Enabled
-  if (user.isTwoFactor) {
-    const generatedOtp = "123456";
+    // Login user first
+    login(user);
 
-    localStorage.setItem("otp", generatedOtp);
-    localStorage.setItem("mfaUser", user.username);
+    //  If Two Factor Enabled
+    if (user.isTwoFactor) {
+      const generatedOtp = "123456";
 
-    navigate("/mfa");
-  } else {
-    //  Direct access to dashboard
-    navigate("/dashboard");
-  }
-};
+      localStorage.setItem("otp", generatedOtp);
+      localStorage.setItem("mfaEmail", user.email);
+      localStorage.setItem("mfaUser", user.username);
+
+      navigate("/mfa");
+    } else {
+      //  Direct access to dashboard
+      navigate("/dashboard");
+    }
+  };
 
 
-  const handleNavigateForgotPassword=()=>{
+  const handleNavigateForgotPassword = () => {
     navigate("/forgotPassword");
   }
 
 
-  return (
-    <div className="bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+return (
+  <div className="min-h-screen bg-white grid place-items-center px-4 sm:px-6 lg:px-8">
 
-      <div className="w-full 
-                max-w-sm 
-                sm:max-w-md 
-                md:max-w-lg 
-                lg:max-w-md 
-                mx-auto">
+    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xs flex flex-col">
 
-        <div className="flex items-center justify-center gap-[5.208px] mb-[82px]">
-          <svg
-            className="w-[46px] h-[46px]"
-            viewBox="0 0 46 46"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="46" height="46" fill="#dbc5c517" rx="8" alt="App Logo" />
-          </svg>
-          <p className=" font-extrabold text-[19.203px] leading-[25.604px] text-[#00bfa6] tracking-[-0.2304px]">
-            Your App Name
-          </p>
+      <div className="flex items-center justify-center gap-1.5 mb-6 sm:mb-8">
+        <svg
+          className="w-[46px] h-[46px]"
+          viewBox="0 0 46 46"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="46" height="46" fill="#dbc5c517" rx="8" alt="App Logo" />
+        </svg>
+        <p className="font-extrabold text-base text-text-primary">
+          Your App Name
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="flex flex-col gap-5 mb-6">
+
+          <Input
+            type="text"
+            placeholder="ADM-001"
+            error={!!errors.username}
+            helperText={errors.username?.message}
+            {...register("username")}
+            onChange={(e) =>
+              setValue("username", e.target.value.toUpperCase())
+            }
+          />
+
+          <Input
+            type="password"
+            placeholder="Password"
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            {...register("password")}
+          />
+
+          <div className="flex gap-3 items-center">
+            <Checkbox
+              checked={rememberMe}
+              label="Remember me"
+              onChange={(checked) => setValue("rememberMe", checked)}
+              {...register("rememberMe")}
+            />
+          </div>
+
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="flex flex-col gap-[20px] mb-[20px]">
-            <Input
-              type="text"
-              placeholder="ADM-001"
-              error={!!errors.username}
-              helperText={errors.username?.message}
-              {...register("username")}
-              onChange={(e) =>
-                setValue("username", e.target.value.toUpperCase())
-              }
-            />
+        <div className="flex flex-col gap-3">
 
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            disabled={isSubmitting}
+            className="w-full"
+          >
+            {isSubmitting ? "Signing In..." : "Sign In"}
+          </Button>
 
-            <Input
-              type="password"
-              placeholder="Password"
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              {...register("password")}
-            />
-            <div className="flex gap-[12px] items-center">
-              <Checkbox
-                checked={rememberMe}
-                label="Remember me"
-                onChange={(checked) => setValue("rememberMe", checked)}
-                {...register("rememberMe")}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-[10px]">
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              disabled={isSubmitting}
-              className="w-full"
+          <p className="font-normal text-[#3a3f51] text-center text-sm sm:text-base">
+            <a
+              href="#"
+              className="text-text-primary hover:underline"
+              onClick={handleNavigateForgotPassword}
             >
-              {isSubmitting ? "Signing In..." : "Sign In"}
-            </Button>
-            <p className=" font-normal  text-[#3a3f51] text-center ">
-              <a href="#" className="text-text-primary hover:underline" onClick={handleNavigateForgotPassword}>
-                Forgot password?
-              </a>
+              Forgot password?
+            </a>
+          </p>
 
-              {/* <span className="mx-2">|</span>
+        </div>
+      </form>
 
-              Don’t have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-[#00bfa6] font-medium hover:underline"
-              >
-                Sign Up
-              </Link> */}
-            </p>
-
-
-
-
-          </div>
-        </form>
-      </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default SignIn;
