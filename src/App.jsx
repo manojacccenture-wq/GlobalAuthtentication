@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./Context/AuthContext";
 import RouteGuard from "./routes/RouteGuard";
 import Loader from "./components/Common/Loader/Loader";
+import AuthLayout from "./layouts/AuthLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
+import { LayoutProvider } from "./context/LayoutContext";
 
 //  Lazy Loaded Pages
 const SignIn = lazy(() => import("./pages/SignIn/SignIn"));
@@ -16,32 +19,43 @@ const AccessDenied = lazy(() => import("./pages/AccessDenied/AccessDenied"));
 const App = () => {
   return (
     <AuthProvider>
-      <Suspense
-        fallback={<Loader size="lg" variant="primary" text="Loading ..." />}
-      >
-        <Routes>
+      <LayoutProvider>
+        <Suspense
+          fallback={<Loader size="lg" variant="primary" text="Loading ..." />}
+        >
+          <Routes>
 
-          {/* Public Routes */}
-          <Route path="/" element={<RouteGuard requirePublic><SignIn /></RouteGuard>} />
 
-          <Route path="/signup" element={<RouteGuard requirePublic> <SignUp /></RouteGuard>} />
+            <Route path="/" element={<RouteGuard requirePublic><SignIn /></RouteGuard>} />
 
-          <Route path="/forgotPassword" element={<RouteGuard requirePublic><ForgotPassword /></RouteGuard>} />
+            <Route path="/signup" element={<RouteGuard requirePublic> <SignUp /></RouteGuard>} />
 
-          {/* MFA Route */}
-          <Route path="/mfa" element={<RouteGuard requireMfa><MFA /></RouteGuard>} />
+            <Route path="/forgotPassword" element={<RouteGuard requirePublic><ForgotPassword /></RouteGuard>} />
 
-          {/* Protected Route */}
-          <Route path="/dashboard" element={<RouteGuard  allowedRoles={["superadmin", "admin", "user", "supervisor"]}><Dashboard /></RouteGuard>} />
+            {/* <Route element={
+              <RouteGuard allowedRoles={["superadmin", "admin", "user", "supervisor"]}>
+                <DashboardLayout />
+              </RouteGuard>
+            }>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route> */}
 
-          {/* Reset Password Protected by State */}
-          <Route path="/reset-password" element={<RouteGuard requireResetState><ResetPassword /></RouteGuard>} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
 
-          {/* Access Denied */}
-          <Route path="/access-denied" element={<AccessDenied />} />
+            {/* MFA Route */}
+            <Route path="/mfa" element={<RouteGuard requireMfa><MFA /></RouteGuard>} />
 
-        </Routes>
-      </Suspense>
+            {/* Reset Password Protected by State */}
+            <Route path="/reset-password" element={<RouteGuard requireResetState><ResetPassword /></RouteGuard>} />
+
+            {/* Access Denied */}
+            <Route path="/access-denied" element={<AccessDenied />} />
+
+          </Routes>
+        </Suspense>
+      </LayoutProvider>
     </AuthProvider>
   );
 };
