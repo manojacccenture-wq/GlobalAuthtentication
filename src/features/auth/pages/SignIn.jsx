@@ -3,12 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from 'react-redux';
 
-import Input from '../../components/UI/Input/Input';
-import Button from '../../components/UI/Button/Button';
-import Checkbox from '../../components/UI/CheckBox/Checkbox';
+import Input from '../../../shared/components/UI/Input/Input';
+import Button from '../../../shared/components/UI/Button/Button';
+import Checkbox from '../../../shared/components/UI/CheckBox/Checkbox';
 import { useForm } from 'react-hook-form';
-import { signInSchema } from '../../schemas/auth.schema';
-import { loginAsync, clearError } from '../../features/auth/authSlice';
+import { signInSchema } from '../schemas/auth.schema';
+import { loginAsync,clearError } from '../authSlice';
+
 
 
 const SignIn = () => {

@@ -5,11 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import Input from "../../components/UI/Input/Input";
-import Button from "../../components/UI/Button/Button";
-import { requestPasswordResetAsync, clearError } from "../../features/auth/authSlice";
+import Input from "../../../shared/components/UI/Input/Input";
+import Button from "../../../shared/components/UI/Button/Button";
+import { requestPasswordResetAsync, clearError } from "../authSlice";
 
-// 🔐 Username validation (ADM-001 format)
+//  Username validation (ADM-001 format)
 const forgotPasswordSchema = z.object({
   username: z
     .string()

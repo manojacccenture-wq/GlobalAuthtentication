@@ -5,10 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch, useSelector } from 'react-redux';
 
-import PasswordStrengthInput from "../../components/UI/PasswordStrengthInput/PasswordStrengthInput";
-import Input from "../../components/UI/Input/Input";
-import Button from "../../components/UI/Button/Button";
-import { resetPasswordAsync, clearError } from "../../features/auth/authSlice";
+import PasswordStrengthInput from "../../../shared/components/UI/PasswordStrengthInput/PasswordStrengthInput";
+import Input from "../../../shared/components/UI/Input/Input";
+import Button from "../../../components/UI/Button/Button";
+import { resetPasswordAsync, clearError } from "../authSlice";
 
 // Validation
 const resetSchema = z

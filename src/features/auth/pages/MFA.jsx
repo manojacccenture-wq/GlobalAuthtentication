@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
-import Input from "../../components/UI/Input/Input";
-import Button from "../../components/UI/Button/Button";
-import { verifyMfaAsync, clearError } from "../../features/auth/authSlice";
+import Input from "../../../shared/components/UI/Input/Input";
+import Button from "../../../components/UI/Button/Button";
+import { verifyMfaAsync,clearError } from "../authSlice";
+
 
 const MFA = () => {
   const navigate = useNavigate();
