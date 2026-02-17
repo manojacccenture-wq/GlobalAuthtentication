@@ -17,7 +17,7 @@ export default function Sidebar() {
   }
   );
   return (
-    <aside className="w-[250px] border-r border-gray-100 p-6">
+    <aside className="w-[250px] border-r border-gray-100 p-2">
       <div className="flex items-center gap-2 mb-8">
         <h1 className="text-[#00BFA6] font-bold text-lg">Toily</h1>
       </div>

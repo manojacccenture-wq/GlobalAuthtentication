@@ -1,11 +1,11 @@
 import AppRouter from "./app/router";
-
-
+import ErrorBoundary from "./shared/components/ErrorBoundary/ErrorBoundary";
 
 const App = () => {
   return (
-    <AppRouter/>
-
+    <ErrorBoundary>
+      <AppRouter />
+    </ErrorBoundary>
   );
 };
 

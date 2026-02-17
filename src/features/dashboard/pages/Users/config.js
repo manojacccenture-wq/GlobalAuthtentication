@@ -19,9 +19,9 @@ export const userManagementConfig = {
 
   filters: [
     { id: 'all', label: 'All' },
-    { id: 'vendor', label: 'Vendor' },
-    { id: 'supervisor', label: 'Supervisor' },
-    { id: 'cleaner', label: 'Cleaner' }
+    { id: 'superadmin', label: 'Super Admin' },
+    { id: 'admin', label: 'Admin' },
+    { id: 'user', label: 'User' }
   ],
 
   summaryCards: [
