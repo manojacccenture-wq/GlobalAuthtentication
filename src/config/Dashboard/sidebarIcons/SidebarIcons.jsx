@@ -7,16 +7,16 @@ import roleBasedAccess from "../../../assets/Images/Icons/SideBar/roleBasedAcces
 import helpAndSupport from "../../../assets/Images/Icons/SideBar/helpAndSupport.png"
 import logOut from "../../../assets/Images/Icons/SideBar/logOut.png"
 
-// export const sidebarIcons = {
-//   overview: overView,
-//   toilets,
-//   vendorManagement,
-//   feedbackManagement,
-//   userManagement,
-//   roleBasedAccess,
-//   helpAndSupport,
-//   logOut
-// };
+export const SIDEBAR_ICONS = {
+  dashboard: overView,
+  toilets: toilets,
+  vendors: vendorManagement,
+  feedback: feedbackManagement,
+  users: userManagement,
+  roles: roleBasedAccess,
+  support: helpAndSupport,
+  logout: logOut,
+};
 
 
 export const menuItems = [

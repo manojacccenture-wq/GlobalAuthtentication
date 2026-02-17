@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PasswordStrengthInput from "../../../shared/components/UI/PasswordStrengthInput/PasswordStrengthInput";
 import Input from "../../../shared/components/UI/Input/Input";
-import Button from "../../../components/UI/Button/Button";
+import Button from "../../../shared/components/UI/Button/Button";
 import { resetPasswordAsync, clearError } from "../authSlice";
 
 // Validation

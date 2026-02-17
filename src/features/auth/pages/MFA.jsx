@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import Input from "../../../shared/components/UI/Input/Input";
-import Button from "../../../components/UI/Button/Button";
+import Button from "../../../shared/components/UI/Button/Button";
 import { verifyMfaAsync,clearError } from "../authSlice";
 
 

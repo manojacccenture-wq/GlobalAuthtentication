@@ -1,66 +1,52 @@
-// Menu configuration for sidebar navigation
+import { PERMISSIONS } from './permission/permission';
+
 export const menuConfig = [
   {
     id: 'dashboard',
-    label: 'Dashboard',
+    label: 'Overview',
     path: '/dashboard',
-    icon: 'dashboard',
-    roles: ['superadmin', 'admin', 'user', 'supervisor'],
-    children: [],
+    permission: PERMISSIONS.VIEW_DASHBOARD,
   },
   {
-    id: 'settings',
-    label: 'Settings',
-    path: '/settings',
-    icon: 'settings',
-    roles: ['superadmin', 'admin'],
-    children: [
-      {
-        id: 'user-settings',
-        label: 'User Settings',
-        path: '/settings/users',
-        icon: 'users',
-        roles: ['superadmin', 'admin'],
-      },
-      {
-        id: 'account-settings',
-        label: 'Account Settings',
-        path: '/settings/account',
-        icon: 'account',
-        roles: ['superadmin', 'admin', 'user'],
-      },
-    ],
+    id: 'toilets',
+    label: 'Toilets',
+    path: '/dashboard/toilets',
+    permission: PERMISSIONS.VIEW_TOILETS,
   },
   {
-    id: 'billing',
-    label: 'Billing',
-    path: '/billing',
-    icon: 'billing',
-    roles: ['superadmin', 'admin'],
-    children: [],
+    id: 'vendors',
+    label: 'Vendor management',
+    path: '/dashboard/vendors',
+    permission: PERMISSIONS.VIEW_VENDORS,
+  },
+  {
+    id: 'feedback',
+    label: 'Feedback management',
+    path: '/dashboard/feedback',
+    permission: PERMISSIONS.VIEW_FEEDBACK,
+  },
+  {
+    id: 'users',
+    label: 'User management',
+    path: '/dashboard/users',
+    permission: PERMISSIONS.VIEW_USERS,
+  },
+  {
+    id: 'roles',
+    label: 'Role based access',
+    path: '/dashboard/roles',
+    permission: PERMISSIONS.VIEW_ROLES,
+  },
+  {
+    id: 'support',
+    label: 'Help & Support',
+    path: '/dashboard/support',
+    permission: PERMISSIONS.VIEW_SUPPORT,
+  },
+  {
+    id: 'logout',
+    label: 'Log Out',
+    path: '/logout',
+    permission: null, // always visible
   },
 ];
-
-// Helper function to filter menu items based on user role
-export const getMenuByRole = (role) => {
-  return menuConfig.filter((item) => item.roles.includes(role));
-};
-
-// Helper function to check if user has access to a menu item
-export const hasMenuAccess = (role, menuId) => {
-  const findMenuItem = (items, id) => {
-    for (let item of items) {
-      if (item.id === id && item.roles.includes(role)) {
-        return true;
-      }
-      if (item.children?.length > 0) {
-        if (findMenuItem(item.children, id)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
-  return findMenuItem(menuConfig, menuId);
-};

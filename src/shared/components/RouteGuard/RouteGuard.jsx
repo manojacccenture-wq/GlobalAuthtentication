@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { hasPermission } from '../../../utils/permissionUtils/permissionUtils';
 
 const RouteGuard = ({
   children,
@@ -8,9 +9,11 @@ const RouteGuard = ({
   requireMfa = false,
   requireResetState = false,
   allowedRoles = [],
+  requiredPermission = null,
+
 }) => {
   const location = useLocation();
-  
+
   // Get auth state from Redux
   const { user, isAuthenticated, mfaPending } = useSelector((state) => state.auth);
 
@@ -30,12 +33,19 @@ const RouteGuard = ({
     if (!mfaPending) return <Navigate to="/dashboard" replace />;
   }
 
-  // 4️⃣ Role-based protection
-  if (allowedRoles.length > 0) {
-    if (!user || !allowedRoles.includes(user.role)) {
+  // Permission-based protection
+  if (requiredPermission) {
+    if (!user || !hasPermission(user.role, requiredPermission)) {
       return <Navigate to="/access-denied" replace />;
     }
   }
+
+  // // 4️⃣ Role-based protection
+  // if (allowedRoles.length > 0) {
+  //   if (!user || !allowedRoles.includes(user.role)) {
+  //     return <Navigate to="/access-denied" replace />;
+  //   }
+  // }
 
   // 5️⃣ Reset password route protection
   if (requireResetState && !location.state?.username) {
