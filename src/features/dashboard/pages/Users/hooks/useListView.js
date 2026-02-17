@@ -13,9 +13,9 @@ export const useListView = (initialData = []) => {
     let result = [...data];
 
     if (searchTerm.trim()) {
-      result = result.filter(item =>
-        Object.values(item).some(value =>
-          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      result = result?.filter(item =>
+        Object.values(item)?.some(value =>
+          String(value)?.toLowerCase()?.includes(searchTerm?.toLowerCase())
         )
       );
     }

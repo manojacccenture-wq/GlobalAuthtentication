@@ -13,12 +13,17 @@ import { userManagementConfig } from './config';
 
 const Users = () => {
   const sampleUserData = [
-    { id: 1, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' },
-    { id: 2, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' },
-    { id: 3, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' },
-    { id: 4, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' },
-    { id: 5, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' },
-    { id: 6, username: 'Johndoe', role: 'Supervisor', vendor: 'Cleantech solutions' }
+    { id: 1, username: 'Johndoe', role: 'superadmin', vendor: 'Cleantech solutions' },
+    { id: 2, username: 'doeJohn', role: 'admin', vendor: 'Cleantech solutions' },
+    { id: 3, username: 'ganesh', role: 'admin', vendor: 'Cleantech solutions' },
+    { id: 4, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 5, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 6, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 7, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 8, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 9, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 10, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
+    { id: 11, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' }
   ];
 
   const listView = useListView(sampleUserData);
@@ -111,7 +116,7 @@ const Users = () => {
           searchValue={listView.searchTerm}
           onSearchChange={handleSearchChange}
           onFilterClick={handleFilterClick}
-          totalCount={430}
+          totalCount={sampleUserData.length}
         />
 
         {/* ================= HEADER + ADD BUTTON ================= */}
