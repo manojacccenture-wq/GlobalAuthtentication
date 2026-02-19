@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import SummaryHeader from './components/SummaryHeader';
 import SummaryCards from './components/SummaryCards';
 import UserListHeader from './components/UserListHeader';
@@ -12,10 +13,18 @@ import ConfirmModal from '../../../../shared/components/ConfirmModal/ConfirmModa
 import total_user from "../../../../assets/Images/Page_Image/Dashboard/User/Total_User.png"
 
 import { useListView } from './hooks/useListView';
+import { useUsers, useUserLoading, useUserError } from '../../../../app/store/hooks/useUserHooks';
+import { fetchUsers, deleteUser, resetPassword } from '../../../../app/store/slices/userSlice';
+import { showToast } from '../../../../app/store/slices/toastSlice';
 
-import { userManagementConfig } from './config';
+import { userManagementConfig } from './config/config';
 
 const Users = () => {
+  const dispatch = useDispatch();
+  const reduxUsers = useUsers();
+  const isLoading = useUserLoading();
+  const error = useUserError();
+
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -24,7 +33,13 @@ const Users = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [userToResetPassword, setUserToResetPassword] = useState(null);
 
-  const sampleUserData = [
+  // Fetch users on component mount
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  // Use Redux users if available, otherwise fall back to local sample data
+  const userData = reduxUsers && reduxUsers.length > 0 ? reduxUsers : [
     { id: 1, username: 'Johndoe', role: 'superadmin', vendor: 'Cleantech solutions' },
     { id: 2, username: 'doeJohn', role: 'admin', vendor: 'Cleantech solutions' },
     { id: 3, username: 'ganesh', role: 'admin', vendor: 'Cleantech solutions' },
@@ -38,33 +53,33 @@ const Users = () => {
     { id: 11, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' }
   ];
 
-  const listView = useListView(sampleUserData);
+  const listView = useListView(userData);
 
   const summaryCardsData = [
     {
       label: 'Total User',
-      value: '50',
+      value: userData?.length?.toString(),
       valueColor: '#6100FF',
       iconBg: '#6100FF',
       icon: total_user
     },
     {
       label: 'Total Staffs',
-      value: '34',
+      value: userData.filter(u => u.role !== 'Supervisor').length?.toString(),
       valueColor: '#6100FF',
       iconBg: '#6100FF',
       icon: total_user
     },
     {
       label: 'Supervisors',
-      value: '05',
+      value: userData.filter(u => u.role === 'Supervisor').length?.toString(),
       valueColor: '#2ECC71',
       iconBg: '#2ECC71',
       icon: total_user
     },
     {
       label: 'Cleaners',
-      value: '30',
+      value: userData.filter(u => u.role === 'Cleaner').length?.toString(),
       valueColor: '#FFA800',
       iconBg: '#FFA800',
       icon: total_user
@@ -82,7 +97,6 @@ const Users = () => {
   };
 
   const handleViewClick = (user) => {
-    console.log('View user:', user);
   };
 
   const handleEditClick = (user) => {
@@ -96,7 +110,14 @@ const Users = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    console.log('Delete confirmed for user:', userToDelete);
+    if (userToDelete) {
+      try {
+        await dispatch(deleteUser(userToDelete.id)).unwrap();
+        dispatch(showToast({ message: 'User deleted successfully', type: 'success' }));
+      } catch (error) {
+        dispatch(showToast({ message: error?.message || 'Failed to delete user', type: 'error' }));
+      }
+    }
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
   };
@@ -107,13 +128,12 @@ const Users = () => {
   };
 
   const handleResetPasswordSave = (formData) => {
-    console.log('Reset password for user:', userToResetPassword, formData);
+    // Toast is handled in ResetPasswordModal component
     setIsResetPasswordModalOpen(false);
     setUserToResetPassword(null);
   };
 
   const handleFilterClick = () => {
-    console.log('Filter clicked');
   };
 
   const handleAddClick = () => {
@@ -121,7 +141,7 @@ const Users = () => {
   };
 
   const handleEditSave = (formData) => {
-    console.log('Save edited user:', formData);
+
     setIsEditModalOpen(false);
     setSelectedUser(null);
   };
@@ -153,7 +173,7 @@ const Users = () => {
           searchValue={listView.searchTerm}
           onSearchChange={handleSearchChange}
           onFilterClick={handleFilterClick}
-          totalCount={sampleUserData.length}
+          totalCount={userData.length}
         />
 
         {/* ================= HEADER + ADD BUTTON ================= */}

@@ -91,7 +91,7 @@ const PersonalDetailsForm = ({
 
       {showButtons && isEditMode && (
         <div className="flex gap-3 items-center justify-end pt-4">
-          <Button onClick={handleCancel}>
+          <Button onClick={handleCancel} variant="danger">
             Cancel
           </Button>
           <Button onClick={handleSave}>

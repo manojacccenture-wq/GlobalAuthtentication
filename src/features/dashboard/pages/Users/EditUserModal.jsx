@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../../../shared/components/Modal/Modal';
 import PersonalDetailsStep from './steps/PersonalDetailsStep';
+import { updateUser } from '../../../../app/store/slices/userSlice';
+import { showToast } from '../../../../app/store/slices/toastSlice';
+import { editUserSchema } from './validation/userSchemas';
 
 const EditUserModal = ({
   isOpen = false,
-  onClose = () => {},
+  onClose = () => { },
   userData = {},
-  onSave = () => {}
+  onSave = () => { }
 }) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.user.loading);
+  const [errors, setErrors] = useState({});
   const userRole = userData.role || 'User';
 
-  const handleSubmit = (formData) => {
-    onSave(formData);
-    onClose();
+  const handleSubmit = async (formData) => {
+    try {
+      // Validate form data
+      const validatedData = await editUserSchema.parseAsync(formData);
+      setErrors({});
+      
+      // Dispatch Redux action to update user
+      await dispatch(updateUser({ id: userData.id, userData: validatedData })).unwrap();
+      
+      // Dispatch success toast notification
+      dispatch(showToast({ message: 'User updated successfully', type: 'success' }));
+      
+      // Call onSave callback if provided
+      if (onSave) {
+        onSave(formData);
+      }
+      
+      onClose();
+    } catch (error) {
+      if (error.errors) {
+        const newErrors = {};
+        error.errors.forEach(err => {
+          newErrors[err.path[0]] = err.message;
+        });
+        setErrors(newErrors);
+      } else {
+        // Handle API error
+        console.error('Error updating user:', error);
+        dispatch(showToast({ message: error?.message || 'Failed to update user', type: 'error' }));
+      }
+    }
   };
 
   const handleCancel = () => {
+    setErrors({});
     onClose();
   };
 
@@ -28,10 +64,10 @@ const EditUserModal = ({
       closeOnOverlayClick={true}
       header={
         <div className="flex flex-col gap-1">
-          <p className="text-lg font-medium text-[var(--color-text-title)] font-['Outfit',sans-serif] leading-[22px]">
+          <p className="text-lg font-medium  leading-[22px]">
             Edit {userRole} details
           </p>
-          <p className="text-base font-normal text-[var(--color-neutral-30)] font-['Outfit',sans-serif] leading-[20px]">
+          <p className="text-base font-normal  leading-[20px]">
             Update {userRole} personal details
           </p>
         </div>

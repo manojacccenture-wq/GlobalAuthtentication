@@ -103,6 +103,7 @@ const Input = React.forwardRef(({
           </div>
         )}
         <input
+          autoComplete='false'
           ref={ref}
           type={type}
           value={value}

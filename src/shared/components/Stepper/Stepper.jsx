@@ -12,7 +12,6 @@ const Stepper = ({
   onStepClick = () => { }
 }) => {
   
-  console.log('steps: ', steps)
   const defaultSteps = [
     { id: 0, label: "Select vendor", icon: vendorIcon },
     { id: 1, label: "Personal details", icon: personIcon },
@@ -24,7 +23,7 @@ const Stepper = ({
   return (
     <div className="flex items-start justify-center gap-3 w-full">
       {stepsList.map((step, index) => {
-        console.log('step: ', step)
+
         const isActive = index === currentStep;
         const isCompleted = index < currentStep;
 
