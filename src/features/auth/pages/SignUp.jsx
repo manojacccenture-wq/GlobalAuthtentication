@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema } from "../../schemas/signup.schema";
+import { signUpSchema } from "../schemas/signup.schema";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import Checkbox from "../../components/UI/CheckBox/Checkbox";
