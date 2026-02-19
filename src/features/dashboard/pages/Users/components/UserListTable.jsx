@@ -13,6 +13,7 @@ const UserListTable = ({
     onViewClick = () => { },
     onEditClick = () => { },
     onDeleteClick = () => { },
+    onPasswordClick = () => { },
     showActions = true
 }) => {
     if (!columns.length) return null;

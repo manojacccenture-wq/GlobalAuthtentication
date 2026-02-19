@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SummaryHeader from './components/SummaryHeader';
 import SummaryCards from './components/SummaryCards';
 import UserListHeader from './components/UserListHeader';
 import UserListFilters from './components/UserListFilters';
 import UserListTable from './components/UserListTable';
 import Pagination from './components/Pagination';
+import AddUserModal from './AddUserModal';
+import EditUserModal from './EditUserModal';
+import ResetPasswordModal from './ResetPasswordModal';
+import ConfirmModal from '../../../../shared/components/ConfirmModal/ConfirmModal';
 import total_user from "../../../../assets/Images/Page_Image/Dashboard/User/Total_User.png"
 
 import { useListView } from './hooks/useListView';
@@ -12,6 +16,14 @@ import { useListView } from './hooks/useListView';
 import { userManagementConfig } from './config';
 
 const Users = () => {
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [userToResetPassword, setUserToResetPassword] = useState(null);
+
   const sampleUserData = [
     { id: 1, username: 'Johndoe', role: 'superadmin', vendor: 'Cleantech solutions' },
     { id: 2, username: 'doeJohn', role: 'admin', vendor: 'Cleantech solutions' },
@@ -74,11 +86,30 @@ const Users = () => {
   };
 
   const handleEditClick = (user) => {
-    console.log('Edit user:', user);
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
   };
 
   const handleDeleteClick = (user) => {
-    console.log('Delete user:', user);
+    setUserToDelete(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    console.log('Delete confirmed for user:', userToDelete);
+    setIsDeleteModalOpen(false);
+    setUserToDelete(null);
+  };
+
+  const handlePasswordClick = (user) => {
+    setUserToResetPassword(user);
+    setIsResetPasswordModalOpen(true);
+  };
+
+  const handleResetPasswordSave = (formData) => {
+    console.log('Reset password for user:', userToResetPassword, formData);
+    setIsResetPasswordModalOpen(false);
+    setUserToResetPassword(null);
   };
 
   const handleFilterClick = () => {
@@ -86,7 +117,13 @@ const Users = () => {
   };
 
   const handleAddClick = () => {
-    console.log('Add new user clicked');
+    setIsAddUserModalOpen(true);
+  };
+
+  const handleEditSave = (formData) => {
+    console.log('Save edited user:', formData);
+    setIsEditModalOpen(false);
+    setSelectedUser(null);
   };
 
   const handlePageChange = (page) => {
@@ -135,6 +172,7 @@ const Users = () => {
             onViewClick={handleViewClick}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
+            onPasswordClick={handlePasswordClick}
             showActions={true}
           />
         </div>
@@ -151,6 +189,45 @@ const Users = () => {
         </div>
 
       </div>
+
+      <AddUserModal
+        isOpen={isAddUserModalOpen}
+        onClose={() => setIsAddUserModalOpen(false)}
+      />
+
+      <EditUserModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedUser(null);
+        }}
+        userData={selectedUser || {}}
+        onSave={handleEditSave}
+      />
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Are you sure want to delete?"
+        description={`This will permanently delete ${userToDelete?.username || 'this user'}'s account. This action cannot be undone.`}
+        confirmText="Yes"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => {
+          setIsDeleteModalOpen(false);
+          setUserToDelete(null);
+        }}
+      />
+
+      <ResetPasswordModal
+        isOpen={isResetPasswordModalOpen}
+        onClose={() => {
+          setIsResetPasswordModalOpen(false);
+          setUserToResetPassword(null);
+        }}
+        userData={userToResetPassword || {}}
+        onSave={handleResetPasswordSave}
+      />
     </div>
   );
 
