@@ -49,6 +49,9 @@ const Button = React.forwardRef(
             outlineWarning: "btn-outline-warning",
             outlineDanger: "btn-outline-danger",
             icon: "btn-icon",
+
+
+
         };
 
         const sizes = {

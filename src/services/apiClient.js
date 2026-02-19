@@ -4,6 +4,8 @@ import { store } from '../app/store';
 
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
+export const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
+
 const apiClient = axios.create({
   baseURL,
   timeout: 10000,
@@ -36,5 +38,7 @@ apiClient.interceptors.request.use(
 //     return Promise.reject(error);
 //   }
 // );
+
+
 
 export default apiClient;
