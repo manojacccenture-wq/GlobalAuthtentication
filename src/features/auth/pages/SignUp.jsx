@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../schemas/signup.schema";
 import Input from "../../../shared/components/UI/Input/Input";
 import Button from "../../../shared/components/UI/Button/Button";
-import Checkbox from "../../../shared/UI/CheckBox/Checkbox";
+import Checkbox from "../../../shared/components/UI/CheckBox/Checkbox";
 import PasswordStrengthInput from "../../../shared/components/UI/PasswordStrengthInput/PasswordStrengthInput";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
