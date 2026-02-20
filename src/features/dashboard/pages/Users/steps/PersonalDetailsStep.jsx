@@ -6,7 +6,8 @@ const PersonalDetailsStep = ({
   initialData = {},
   onFormChange = () => {},
   onSubmit = () => {},
-  onCancel = () => {}
+  onCancel = () => {},
+  register, errors, setValue, watch
 }) => {
   return (
     <PersonalDetailsForm
@@ -17,6 +18,9 @@ const PersonalDetailsStep = ({
       onSubmit={onSubmit}
       onCancel={onCancel}
       showButtons={true}
+      register={register}
+      errors={errors}
+
     />
   );
 };

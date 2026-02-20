@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react';
+import { useUsers } from '../../../../../app/store/hooks/useUserHooks';
 
 export const useListView = (initialData = []) => {
+  const reduxUsers = useUsers();
+
   const [data, setData] = useState(initialData);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,7 +13,8 @@ export const useListView = (initialData = []) => {
   const [error, setError] = useState(null);
 
   const filteredData = useCallback(() => {
-    let result = [...data];
+    let result = [...reduxUsers];
+
 
     if (searchTerm.trim()) {
       result = result?.filter(item =>

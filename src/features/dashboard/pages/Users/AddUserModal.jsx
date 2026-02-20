@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import Modal from '../../../../shared/components/Modal/Modal';
 import AddUserStepper from './AddUserStepper';
 import SelectVendorStep from './steps/SelectVendorStep';
@@ -11,23 +12,39 @@ import { showToast } from '../../../../app/store/slices/toastSlice';
 import { createUserSchema } from './validation/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const AddUserModal = ({ isOpen = false, onClose = () => {} }) => {
+const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
   const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(createUserSchema),
+    mode: "onTouched",
+    defaultValues: {
+      role: 'Supervisor',
+      vendor: 'Vendor1',
+      userId: '',
+      userName: '',
+      email: '',
+      phone: '',
+      aadharCardNumber: '',
+      pancardNumber: '',
+      address: '',
+      password: '',
+    },
+  });
+
+
   const isLoading = useSelector(state => state.user.loading);
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
-    role: 'Supervisor',
-    vendor: 'Vendor1',
-    userId: '',
-    userName: '',
-    email: '',
-    phone: '',
-    aadharCardNumber: '',
-    pancardNumber: '',
-    address: '',
-    password: ''
-  });
-  const [errors, setErrors] = useState({});
+
+
 
   const handleStepClick = (stepIndex) => {
     setCurrentStep(stepIndex);
@@ -39,76 +56,55 @@ const AddUserModal = ({ isOpen = false, onClose = () => {} }) => {
     }
   };
 
+
+
   const handleNext = async () => {
-    // Validate current step before moving forward
+    let fieldsToValidate = [];
+
+    if (currentStep === 0) {
+      fieldsToValidate = ['role', 'vendor'];
+    }
+
     if (currentStep === 1) {
-      // Validate personal details step
-      try {
-        const personalDetailsSchema = createUserSchema.pick({
-          userId: true,
-          userName: true,
-          email: true,
-          phone: true,
-          aadharCardNumber: true,
-          pancardNumber: true,
-          address: true
-        });
-        await personalDetailsSchema.parseAsync(formData);
-        setErrors({});
-        setCurrentStep(currentStep + 1);
-      } catch (error) {
-        const newErrors = {};
-        error.errors?.forEach(err => {
-          newErrors[err.path[0]] = err.message;
-        });
-        setErrors(newErrors);
-      }
-    } else if (currentStep < 2) {
-      setCurrentStep(currentStep + 1);
+      fieldsToValidate = [
+        'userId',
+        'userName',
+        'email',
+        'phone',
+        'aadharCardNumber',
+        'pancardNumber',
+        'address'
+      ];
+    }
+
+    const isValid = await trigger(fieldsToValidate);
+
+    if (isValid) {
+      setCurrentStep(prev => prev + 1);
     }
   };
 
-  const handleSubmit = async () => {
+
+  const onSubmit = async (data) => {
     try {
-      // Validate complete form data
-      const validatedData = await createUserSchema.parseAsync(formData);
-      setErrors({});
-      
-      // Dispatch Redux action to create user
-      await dispatch(createUser(validatedData)).unwrap();
-      
-      // Dispatch success toast notification
-      dispatch(showToast({ message: 'User created successfully', type: 'success' }));
-      
-      // Reset form and close modal on success
-      setFormData({
-        role: 'Supervisor',
-        vendor: 'Vendor1',
-        userId: '',
-        userName: '',
-        email: '',
-        phone: '',
-        aadharCardNumber: '',
-        pancardNumber: '',
-        address: '',
-        password: ''
-      });
+      await dispatch(createUser(data)).unwrap();
+
+      dispatch(showToast({
+        message: 'User created successfully',
+        type: 'success'
+      }));
+
+      reset();
       setCurrentStep(0);
       onClose();
     } catch (error) {
-      if (error.errors) {
-        const newErrors = {};
-        error.errors.forEach(err => {
-          newErrors[err.path[0]] = err.message;
-        });
-        setErrors(newErrors);
-      } else {
-        // Handle API error
-        console.error('Error creating user:', error);
-        dispatch(showToast({ message: error?.message || 'Failed to create user', type: 'error' }));
-      }
+      dispatch(showToast({
+        message: error?.message || 'Failed to create user',
+        type: 'error'
+      }));
     }
   };
+
 
   const handleRoleChange = (role) => {
     setFormData(prev => ({ ...prev, role }));
@@ -133,60 +129,82 @@ const AddUserModal = ({ isOpen = false, onClose = () => {} }) => {
           <SelectVendorStep
             onRoleChange={handleRoleChange}
             onVendorChange={handleVendorChange}
-            selectedRole={formData.role}
-            selectedVendor={formData.vendor}
+            register={register}
+            watch={watch}
+            setValue={setValue}
+            errors={errors}
           />
         );
       case 1:
         return (
           <PersonalDetailsStep
-            formData={formData}
+
             onFormChange={handlePersonalDetailsChange}
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            watch={watch}
           />
         );
       case 2:
         return (
           <CreatePasswordStep
-            formData={formData}
             onFormChange={handlePasswordChange}
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            watch={watch}
           />
         );
       default:
         return null;
     }
   };
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      width="628px"
+      width="700px"
       closeOnEsc={true}
       closeOnOverlayClick={true}
     >
-      <div className="flex flex-col gap-8">
-        <AddUserStepper currentStep={currentStep} onStepClick={handleStepClick} />
+      {/* Full modal layout */}
+      <div className="flex flex-col h-[60vh] max-h-[20%] ">
 
-        <div className="flex flex-col gap-8">
+        {/* Stepper (Fixed) */}
+        <div className="pb-6">
+          <AddUserStepper
+            currentStep={currentStep}
+            onStepClick={handleStepClick}
+          />
+        </div>
+
+        {/* Scrollable Step Content */}
+        <div className="flex-1 overflow-y-auto p-2">
           {renderStepContent()}
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-[var(--color-neutral-20)]">
+        {/* Footer (Fixed) */}
+        <div className="flex items-center justify-between pt-4 mt-6 border-t border-[var(--color-neutral-20)]">
           <Button
             onClick={handlePrevious}
             disabled={currentStep === 0 || isLoading}
-            // className="px-6 py-2 bg-[var(--color-neutral-10)] text-[var(--color-text-title)] font-medium text-base leading-5 font-['Outfit',sans-serif] rounded-lg hover:bg-[var(--color-neutral-20)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
           >
             Previous
           </Button>
+
           <Button
-            onClick={currentStep === 2 ? handleSubmit : handleNext}
+            onClick={currentStep === 2 ? handleSubmit(onSubmit) : handleNext}
             disabled={isLoading}
-            // className="px-6 py-2 bg-[var(--color-primary)] text-white font-medium text-sm leading-5 font-['Outfit',sans-serif] rounded-lg hover:opacity-90 transition-opacity duration-200"
           >
-            {isLoading ? 'Processing...' : (currentStep === 2 ? 'Update password' : 'Next')}
+            {isLoading
+              ? 'Processing...'
+              : currentStep === 2
+                ? 'Create User'
+                : 'Next'}
           </Button>
         </div>
+
       </div>
     </Modal>
   );

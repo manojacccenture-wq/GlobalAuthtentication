@@ -188,9 +188,9 @@
 
 
 .btn-icon {
-  background: var(--color-neutral-10);
-  border: 1.5px solid var(--color-neutral-20);
-  color: var(--color-neutral-60);
+  background: var(--color-primary-10);
+  border: 1.5px solid var(--color-neutral-10);
+  color: var(--color-neutral-10);
   border-radius: 10px;
 }
 

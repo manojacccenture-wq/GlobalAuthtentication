@@ -89,6 +89,8 @@ const Input = React.forwardRef(({
     ${error ? 'text-[#f44444]' : 'text-[#666666]'}
   `.replace(/\s+/g, ' ').trim();
 
+  const isRHF = props.name && props.onChange;
+
   return (
     <div className={containerClasses}>
       {label && (
@@ -107,7 +109,8 @@ const Input = React.forwardRef(({
           ref={ref}
           type={type}
           value={value}
-          onChange={handleChange}
+          onChange={isRHF ? props.onChange : handleChange}
+          // onChange={handleChange}
           placeholder={placeholder}
           disabled={disabled}
           className={baseInputClasses}

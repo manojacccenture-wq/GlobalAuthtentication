@@ -52,6 +52,7 @@ const Users = () => {
     { id: 10, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
     { id: 11, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' }
   ];
+  console.log('userData: ', userData)
 
   const listView = useListView(userData);
 
@@ -63,23 +64,29 @@ const Users = () => {
       iconBg: '#6100FF',
       icon: total_user
     },
+    // {
+    //   label: 'Total Staffs',
+    //   value: userData?.filter(u => u.role !== 'Supervisor')?.length?.toString(),
+    //   valueColor: '#6100FF',
+    //   iconBg: '#6100FF',
+    //   icon: total_user
+    // },
     {
-      label: 'Total Staffs',
-      value: userData.filter(u => u.role !== 'Supervisor').length?.toString(),
-      valueColor: '#6100FF',
-      iconBg: '#6100FF',
-      icon: total_user
-    },
-    {
-      label: 'Supervisors',
-      value: userData.filter(u => u.role === 'Supervisor').length?.toString(),
+      label: 'Super Admin',
+      value: userData
+        ?.filter((u) => {
+          return u.role === 'superadmin';
+        })
+        ?.length
+        ?.toString(),
       valueColor: '#2ECC71',
       iconBg: '#2ECC71',
       icon: total_user
     },
+
     {
-      label: 'Cleaners',
-      value: userData.filter(u => u.role === 'Cleaner').length?.toString(),
+      label: 'Admin',
+      value: userData?.filter(u => u.role === 'admin').length?.toString(),
       valueColor: '#FFA800',
       iconBg: '#FFA800',
       icon: total_user

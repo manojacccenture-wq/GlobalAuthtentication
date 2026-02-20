@@ -1,59 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../../../shared/components/Modal/Modal';
 import PasswordForm from './common/PasswordForm';
 import { resetPassword } from '../../../../app/store/slices/userSlice';
 import { showToast } from '../../../../app/store/slices/toastSlice';
 import { resetPasswordSchema } from './validation/userSchemas';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Button from '../../../../shared/components/UI/Button/Button';
 
 const ResetPasswordModal = ({
   isOpen = false,
-  onClose = () => {},
+  onClose = () => { },
   userData = {},
-  onSave = () => {}
+  onSave = () => { }
 }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.user.loading);
-  const [errors, setErrors] = useState({});
-  const userName = userData.username || userData.userName || 'User';
 
-  const handleSubmit = async (formData) => {
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+    reset
+  } = useForm({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: ''
+    }
+  });
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      reset({ password: '' });
+    }
+  }, [isOpen, reset]);
+
+
+
+
+  const onSubmit = async (data) => {
     try {
-      // Validate form data
-      const validatedData = await resetPasswordSchema.parseAsync(formData);
-      setErrors({});
-      
-      // Dispatch Redux action to reset password
-      await dispatch(resetPassword({ id: userData.id, password: validatedData.password })).unwrap();
-      
-      // Dispatch success toast notification
-      dispatch(showToast({ message: 'Password reset successfully', type: 'success' }));
-      
-      // Call onSave callback if provided
-      if (onSave) {
-        onSave(formData);
-      }
-      
+      await dispatch(
+        resetPassword({
+          id: userData.id,
+          password: data.password
+        })
+      ).unwrap();
+
+      dispatch(showToast({
+        message: 'Password reset successfully',
+        type: 'success'
+      }));
+
+      onSave(data);
+      reset();
       onClose();
+
     } catch (error) {
-      if (error.errors) {
-        const newErrors = {};
-        error.errors.forEach(err => {
-          newErrors[err.path[0]] = err.message;
-        });
-        setErrors(newErrors);
-      } else {
-        // Handle API error
-        console.error('Error resetting password:', error);
-        dispatch(showToast({ message: error?.message || 'Failed to reset password', type: 'error' }));
-      }
+      dispatch(showToast({
+        message: error?.message || 'Failed to reset password',
+        type: 'error'
+      }));
     }
   };
 
-  const handleCancel = () => {
-    setErrors({});
-    onClose();
-  };
+  const userName = userData.username || userData.userName || 'User';
 
   return (
     <Modal
@@ -64,22 +80,38 @@ const ResetPasswordModal = ({
       closeOnOverlayClick={true}
       header={
         <div className="flex flex-col gap-1">
-          <p className="text-lg font-medium text-[var(--color-text-title)] font-['Outfit',sans-serif] leading-[22px]">
+          <p className="text-lg font-medium   leading-[22px]">
             Password change
           </p>
-          <p className="text-base font-normal text-[var(--color-neutral-30)] font-['Outfit',sans-serif] leading-[20px]">
+          <p className="text-base font-normal   leading-[20px]">
             Set a new password for {userName}
           </p>
         </div>
       }
       showCloseButton={true}
     >
-      <PasswordForm
-        mode="reset"
-        initialData={userData}
-        onSubmit={handleSubmit}
-        onCancel={handleCancel}
-      />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+
+        <PasswordForm
+          register={register}
+          errors={errors}
+          setValue={setValue}
+          watch={watch}
+          isLoading={isLoading}
+        />
+
+        <div className="flex justify-end gap-3 pt-6">
+          <Button type="button" onClick={onClose} variant="danger">
+            Cancel
+          </Button>
+
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Updating...' : 'Update Password'}
+          </Button>
+        </div>
+
+      </form>
     </Modal>
   );
 };

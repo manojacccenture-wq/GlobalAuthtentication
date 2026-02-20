@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/UI/Button/Button";
-import deniedImage from "../../assets/Images/Denied/Denied.png";
+import Button from "../../../shared/components/UI/Button/Button";
+import deniedImage from "../../../assets/Images/Denied/Denied.png";
 
 
 
