@@ -1,7 +1,17 @@
 import { z } from 'zod';
 
 export const createUserSchema = z.object({
-  role: z.string().min(1, 'Role is required'),
+  role: z
+    .string()
+    .min(1, "Role is required")
+    .refine(
+      (val) => ["superadmin", "admin", "user"].includes(val),
+      {
+        message: "Invalid role selected",
+      }
+    ),
+
+
   vendor: z.string().min(1, 'Vendor is required'),
   userId: z.string().min(3, 'User ID must be at least 3 characters'),
   userName: z.string().min(2, 'User name must be at least 2 characters'),

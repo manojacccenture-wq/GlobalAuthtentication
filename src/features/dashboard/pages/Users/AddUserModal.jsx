@@ -27,8 +27,8 @@ const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
     resolver: zodResolver(createUserSchema),
     mode: "onTouched",
     defaultValues: {
-      role: 'Supervisor',
-      vendor: 'Vendor1',
+      role: '',
+      vendor: '',
       userId: '',
       userName: '',
       email: '',
@@ -46,8 +46,38 @@ const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
 
 
 
-  const handleStepClick = (stepIndex) => {
-    setCurrentStep(stepIndex);
+  const handleStepClick = async (stepIndex) => {
+
+    // Allow going backwards freely
+    if (stepIndex <= currentStep) {
+      setCurrentStep(stepIndex);
+      return;
+    }
+
+    // If moving forward → validate current step first
+    let fieldsToValidate = [];
+
+    if (currentStep === 0) {
+      fieldsToValidate = ['role', 'vendor'];
+    }
+
+    if (currentStep === 1) {
+      fieldsToValidate = [
+        'userId',
+        'userName',
+        'email',
+        'phone',
+        'aadharCardNumber',
+        'pancardNumber',
+        'address'
+      ];
+    }
+
+    const isValid = await trigger(fieldsToValidate);
+
+    if (isValid) {
+      setCurrentStep(stepIndex);
+    }
   };
 
   const handlePrevious = () => {
@@ -106,29 +136,27 @@ const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
   };
 
 
-  const handleRoleChange = (role) => {
-    setFormData(prev => ({ ...prev, role }));
-  };
+  // const handleRoleChange = (role) => {
+  //   setFormData(prev => ({ ...prev, role }));
+  // };
 
-  const handleVendorChange = (vendor) => {
-    setFormData(prev => ({ ...prev, vendor }));
-  };
+  // const handleVendorChange = (vendor) => {
+  //   setFormData(prev => ({ ...prev, vendor }));
+  // };
 
-  const handlePersonalDetailsChange = (detailsData) => {
-    setFormData(prev => ({ ...prev, ...detailsData }));
-  };
+  // const handlePersonalDetailsChange = (detailsData) => {
+  //   setFormData(prev => ({ ...prev, ...detailsData }));
+  // };
 
-  const handlePasswordChange = (passwordData) => {
-    setFormData(prev => ({ ...prev, ...passwordData }));
-  };
+  // const handlePasswordChange = (passwordData) => {
+  //   setFormData(prev => ({ ...prev, ...passwordData }));
+  // };
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
         return (
           <SelectVendorStep
-            onRoleChange={handleRoleChange}
-            onVendorChange={handleVendorChange}
             register={register}
             watch={watch}
             setValue={setValue}
@@ -138,8 +166,6 @@ const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
       case 1:
         return (
           <PersonalDetailsStep
-
-            onFormChange={handlePersonalDetailsChange}
             register={register}
             errors={errors}
             setValue={setValue}
@@ -149,7 +175,6 @@ const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
       case 2:
         return (
           <CreatePasswordStep
-            onFormChange={handlePasswordChange}
             register={register}
             errors={errors}
             setValue={setValue}
