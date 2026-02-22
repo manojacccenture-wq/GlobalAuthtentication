@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import SummaryHeader from './components/SummaryHeader';
 import SummaryCards from './components/SummaryCards';
@@ -13,8 +13,8 @@ import ConfirmModal from '../../../../shared/components/ConfirmModal/ConfirmModa
 import total_user from "../../../../assets/Images/Page_Image/Dashboard/User/Total_User.png"
 
 import { useListView } from './hooks/useListView';
-import { useUsers, useUserLoading, useUserError } from '../../../../app/store/hooks/useUserHooks';
-import { fetchUsers, deleteUser, resetPassword } from '../../../../app/store/slices/userSlice';
+import { useUserLoading, useUsers } from '../../../../app/store/hooks/useUserHooks';
+import { fetchUsers, deleteUser } from '../../../../app/store/slices/userSlice';
 import { showToast } from '../../../../app/store/slices/toastSlice';
 
 import { userManagementConfig } from './config/config';
@@ -23,7 +23,6 @@ const Users = () => {
   const dispatch = useDispatch();
   const reduxUsers = useUsers();
   const isLoading = useUserLoading();
-  const error = useUserError();
 
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -37,24 +36,14 @@ const Users = () => {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-
-  // Use Redux users if available, otherwise fall back to local sample data
-  const userData = reduxUsers && reduxUsers.length > 0 ? reduxUsers : [
-    { id: 1, username: 'Johndoe', role: 'superadmin', vendor: 'Cleantech solutions' },
-    { id: 2, username: 'doeJohn', role: 'admin', vendor: 'Cleantech solutions' },
-    { id: 3, username: 'ganesh', role: 'admin', vendor: 'Cleantech solutions' },
-    { id: 4, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 5, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 6, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 7, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 8, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 9, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 10, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' },
-    { id: 11, username: 'Johndoe', role: 'user', vendor: 'Cleantech solutions' }
-  ];
-  console.log('userData: ', userData)
-
+  const userData = reduxUsers;
+  
   const listView = useListView(userData);
+  
+  if (isLoading) {
+    return <div>Loading users...</div>;
+  }
+
 
   const summaryCardsData = [
     {
@@ -64,13 +53,7 @@ const Users = () => {
       iconBg: '#6100FF',
       icon: total_user
     },
-    // {
-    //   label: 'Total Staffs',
-    //   value: userData?.filter(u => u.role !== 'Supervisor')?.length?.toString(),
-    //   valueColor: '#6100FF',
-    //   iconBg: '#6100FF',
-    //   icon: total_user
-    // },
+
     {
       label: 'Super Admin',
       value: userData
@@ -90,7 +73,14 @@ const Users = () => {
       valueColor: '#FFA800',
       iconBg: '#FFA800',
       icon: total_user
-    }
+    },
+    {
+      label: 'Users',
+      value: userData?.filter(u => u.role !== 'Supervisor')?.length?.toString(),
+      valueColor: '#0099ff',
+      iconBg: '#0099ff',
+      icon: total_user
+    },
   ];
 
   const handleTabChange = (tabId) => {
@@ -156,6 +146,7 @@ const Users = () => {
   const handlePageChange = (page) => {
     listView.setCurrentPage(page);
   };
+
 
   return (
     <div className="grid gap-8 p-2 md:p-2">

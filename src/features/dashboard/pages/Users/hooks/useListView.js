@@ -31,7 +31,7 @@ export const useListView = (initialData = []) => {
     }
 
     return result;
-  }, [data, activeFilter, searchTerm]);
+  }, [reduxUsers, activeFilter, searchTerm]);
 
   const paginatedData = useCallback(() => {
     const filtered = filteredData();

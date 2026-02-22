@@ -11,6 +11,7 @@ const toastSlice = createSlice({
   initialState,
   reducers: {
     showToast: (state, action) => {
+
       state.message = action.payload.message;
       state.type = action.payload.type || 'success';
       state.duration = action.payload.duration || 3000;
