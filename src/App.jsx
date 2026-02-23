@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppRouter from "./app/router";
 import ErrorBoundary from "./shared/components/ErrorBoundary/ErrorBoundary";
 import Toast from "./shared/components/Toast/Toast";
-import { selectToastMessage, selectToastType, selectToastDuration, clearToast } from "./app/store/slices/toastSlice";
+import { selectToastMessage, selectToastType, selectToastDuration, clearToast } from "./shared/components/Toast/api/toastSlice";
 
 const App = () => {
   const dispatch = useDispatch();

@@ -14,13 +14,13 @@ const ResetPassword = lazy(() => import("../features/auth/pages/ResetPassword"))
 const MFA = lazy(() => import("../features/auth/pages/MFA"));
 
 // Dashboard
-const Overview = lazy(() => import("../features/dashboard/pages/Overview/Overview"));
-const Toilets = lazy(() => import("../features/dashboard/pages/Toilets/Toilets"));
-const Vendors = lazy(() => import("../features/dashboard/pages/Vendors/Vendors"));
-const Feedback = lazy(() => import("../features/dashboard/pages/Feedback/Feedback"));
-const Users = lazy(() => import("../features/dashboard/pages/Users/Users"));
-const Roles = lazy(() => import("../features/dashboard/pages/Roles/Roles"));
-const Support = lazy(() => import("../features/dashboard/pages/Support/Support"));
+const Overview = lazy(() => import("../features/dashboard/Sub Features/Overview/Overview"));
+const Toilets = lazy(() => import("../features/dashboard/Sub Features/Toilets/Toilets"));
+const Vendors = lazy(() => import("../features/dashboard/Sub Features/Vendors/Vendors"));
+const Feedback = lazy(() => import("../features/dashboard/Sub Features/Feedback/Feedback"));
+const Users = lazy(() => import("../features/dashboard/Sub Features/Users/Users"));
+const Roles = lazy(() => import("../features/dashboard/Sub Features/Roles/Roles"));
+const Support = lazy(() => import("../features/dashboard/Sub Features/Support/Support"));
 
 
 // Access Denied
