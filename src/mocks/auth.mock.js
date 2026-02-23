@@ -12,7 +12,8 @@ let testUsers = [
     profile: {
       fullName: "Super Admin",
       department: "Management",
-      phone: "+91 9876543210",
+      country: "India",
+      phone: "9087397440",
       status: "active",
       createdAt: "2024-01-10",
     },
@@ -110,39 +111,53 @@ export const register = (userData) =>
 export const verifyMfa = (otp) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-        if (otp === localStorage.getItem('otp')) {
-          resolve({ success: true });
-        } else {
-          reject(new Error('Invalid OTP'));
-        }
-      }, 500);
+      if (otp === localStorage.getItem('otp')) {
+        resolve({ success: true });
+      } else {
+        reject(new Error('Invalid OTP'));
+      }
+    }, 500);
   });
 
-export const requestPasswordReset = (email) =>
+export const requestPasswordReset = (identifier) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-        const user = testUsers.find((u) => u.email === email);
-        if (user) {
-          localStorage.setItem('resetEmail', email);
-          resolve({ message: 'Password reset email sent' });
-        } else {
-          reject(new Error('User not found'));
-        }
-      }, 500);
+      const normalized = identifier.trim().toLowerCase();
+      console.log('normalized: ', normalized)
+
+      const user = testUsers.find((u) => {
+        console.log('u: ', u)
+        return (
+          u.email?.toLowerCase() === normalized ||
+          u.username?.toLowerCase() === normalized ||
+          u.profile?.phone?.replace(/\s/g, "") === normalized.replace(/\s/g, "")
+        );
+      });
+
+      if (user) {
+        localStorage.setItem("resetEmail", user.email);
+
+        resolve({
+          message: "Password reset email sent",
+        });
+      } else {
+        reject(new Error("User not found"));
+      }
+    }, 500);
   });
 
 export const resetPassword = (email, newPassword) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-        const user = testUsers.find((u) => u.email === email);
-        if (user) {
-          user.password = newPassword;
-          localStorage.removeItem('resetEmail');
-          resolve({ message: 'Password reset successfully' });
-        } else {
-          reject(new Error('User not found'));
-        }
-      }, 500);
+      const user = testUsers.find((u) => u.email === email);
+      if (user) {
+        user.password = newPassword;
+        localStorage.removeItem('resetEmail');
+        resolve({ message: 'Password reset successfully' });
+      } else {
+        reject(new Error('User not found'));
+      }
+    }, 500);
   });
 
 export const logout = () => {
@@ -152,4 +167,4 @@ export const logout = () => {
   localStorage.removeItem('mfaEmail');
   localStorage.removeItem('mfaUser');
 }
-;
+  ;

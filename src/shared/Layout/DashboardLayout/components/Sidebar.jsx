@@ -11,11 +11,10 @@ export default function Sidebar() {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
 
-  const filteredMenu = menuConfig.filter((item) => {
-
-    return hasPermission(user?.role, item.permission);
-  }
+  const filteredMenu = menuConfig.filter((item) =>
+    hasPermission(user?.role, item.permission)
   );
+
   return (
     <aside className="w-[250px] border-r border-gray-100 p-2">
       <div className="flex items-center gap-2 mb-8">

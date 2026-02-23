@@ -7,25 +7,37 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Input from "../../../shared/components/UI/Input/Input";
 import Button from "../../../shared/components/UI/Button/Button";
-import {  clearError } from "../authSlice";
-import {requestPasswordResetAsync} from "../authThunk"
+import { clearError } from "../authSlice";
+import { requestPasswordResetAsync } from "../authThunk"
 
 //  Username validation (ADM-001 format)
 const forgotPasswordSchema = z.object({
-  username: z
+  identifier: z
     .string()
-    .regex(
-      /^[A-Z]{3}-\d{3}$/,
-      "Username must be in format: ADM-001"
-    ),
+    .min(1, "Username, email or phone is required")
+    .refine((value) => {
+      const usernameRegex = /^[A-Z]{3}-\d{3}$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^(\+91[\s-]?)?[6-9]\d{9}$/;
+
+      return (
+        usernameRegex.test(value) ||
+        emailRegex.test(value) ||
+        phoneRegex.test(value)
+      );
+    }, {
+      message:
+        "Enter valid Username (ADM-001), Email or Phone number",
+    }),
 });
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // Get auth state from Redux
   const { status, error, resetPasswordEmail } = useSelector((state) => state.auth);
+
 
   const {
     register,
@@ -36,48 +48,62 @@ const ForgotPassword = () => {
     resolver: zodResolver(forgotPasswordSchema),
     mode: "onTouched",
     defaultValues: {
-      username: "",
+      identifier: "",
     },
   });
 
   const isLoading = status === 'loading';
 
+
   // If password reset was successful, navigate to reset password page
   useEffect(() => {
-    if (resetPasswordEmail && status === 'succeeded') {
+    if (resetPasswordEmail && status === 'pending') {
       navigate("/reset-password", {
-        state: { username: resetPasswordEmail },
+        state: { identifier: resetPasswordEmail },
       });
     }
   }, [resetPasswordEmail, status, navigate]);
 
   const onSubmit = async (data) => {
-    // Clear previous errors
-    dispatch(clearError());
-    
-    // TODO: In a real app, you'd fetch the user's email from the backend using the username
-    // For now, we'll use a simple mapping
-    const testUsers = {
-      'SUP-001': 'superadmin@company.com',
-      'ADM-001': 'admin@company.com',
-      'USR-001': 'user@company.com',
-    };
 
-    const email = testUsers[data.username.toUpperCase()];
-    
-    if (!email) {
-      // Dispatch will handle the error
-      dispatch(requestPasswordResetAsync('invalid')).catch(() => {});
-      return;
-    }
+    dispatch(clearError());
+
+    const value = data.identifier?.trim();
 
     try {
-      await dispatch(requestPasswordResetAsync(email)).unwrap();
+      await dispatch(requestPasswordResetAsync(value)).unwrap();
     } catch (err) {
-      // Error is handled by Redux slice
-      console.error('Password reset request failed:', err);
+      console.error("Password reset request failed:", err);
     }
   };
+
+  // const onSubmit = async (data) => {
+  //   // Clear previous errors
+  //   dispatch(clearError());
+
+  //   // TODO: In a real app, you'd fetch the user's email from the backend using the username
+  //   // For now, we'll use a simple mapping
+  //   const testUsers = {
+  //     'SUP-001': 'superadmin@company.com',
+  //     'ADM-001': 'admin@company.com',
+  //     'USR-001': 'user@company.com',
+  //   };
+
+  //   const email = testUsers[data.username.toUpperCase()];
+
+  //   if (!email) {
+  //     // Dispatch will handle the error
+  //     dispatch(requestPasswordResetAsync('invalid')).catch(() => { });
+  //     return;
+  //   }
+
+  //   try {
+  //     await dispatch(requestPasswordResetAsync(email)).unwrap();
+  //   } catch (err) {
+  //     // Error is handled by Redux slice
+  //     console.error('Password reset request failed:', err);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center  px-4 sm:px-6 lg:px-8">
@@ -101,12 +127,12 @@ const ForgotPassword = () => {
 
           <Input
             type="text"
-            placeholder="Enter username"
-            error={!!errors.username}
-            helperText={errors.username?.message}
-            {...register("username")}
+            placeholder="Enter username / email / phone"
+            error={!!errors.identifier}
+            helperText={errors.identifier?.message}
+            {...register("identifier")}
             onChange={(e) =>
-              setValue("username", e.target.value.toUpperCase())
+              setValue("identifier", e.target.value.toUpperCase())
             }
             disabled={isLoading}
           />

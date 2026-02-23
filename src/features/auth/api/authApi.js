@@ -45,13 +45,13 @@ const authService = {
       () => authMock.logout()
     ),
 
-  requestPasswordReset: (email) =>
+  requestPasswordReset: (identifier) =>
     http(
       () =>
         apiClient.post(API_ENDPOINTS.FORGOT_PASSWORD, {
-          email,
+          identifier,
         }),
-      () => authMock.requestPasswordReset(email)
+      () => authMock.requestPasswordReset(identifier)
     ),
 
   resetPassword: (email, newPassword) =>

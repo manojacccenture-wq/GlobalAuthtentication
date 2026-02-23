@@ -48,11 +48,18 @@ const RouteGuard = ({
   // }
 
   // 5️⃣ Reset password route protection
-  if (requireResetState && !location.state?.username) {
-    return <Navigate to="/forgotPassword" replace />;
-  }
+
+  if (
+  requireResetState &&
+  !location.state?.identifier &&
+  location.pathname !== "/forgotPassword"
+) {
+  return <Navigate to="/forgotPassword" replace />;
+}
 
   return children;
 };
 
 export default RouteGuard;
+
+

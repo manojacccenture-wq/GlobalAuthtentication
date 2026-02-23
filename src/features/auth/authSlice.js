@@ -110,7 +110,8 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(requestPasswordResetAsync.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+
+        state.status = 'pending';
         // Store email for reset password step
         state.resetPasswordEmail = action.meta.arg;
       })

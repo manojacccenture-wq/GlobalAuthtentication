@@ -5,6 +5,7 @@ import { PERMISSIONS } from "../config/permission/permission";
 import RouteGuard from "../shared/components/RouteGuard/RouteGuard";
 import AuthLayout from "../shared/Layout/AuthLayout/AuthLayout";
 import DashboardLayout from "../shared/Layout/DashboardLayout/DashboardLayout";
+import Logout from "../features/dashboard/Public Features/Logout/Logout";
 
 // Auth Pages
 const SignIn = lazy(() => import("../features/auth/pages/SignIn"));
@@ -64,6 +65,7 @@ const AppRouter = () => {
           <Route path="support" element={<RouteGuard requiredPermission={PERMISSIONS.VIEW_SUPPORT} > <Support /> </RouteGuard>} /></Route>
 
 
+
         {/* Reset Password */}
 
         <Route path="/reset-password" element={<RouteGuard requireResetState> <ResetPassword /> </RouteGuard>} />
@@ -72,8 +74,12 @@ const AppRouter = () => {
 
         <Route path="/access-denied" element={<AccessDenied />} />
 
-      </Routes>
-    </Suspense>
+        {/* Log Out */}
+
+        <Route path="logout" element={<RouteGuard requireAuth > <Logout /> </RouteGuard>} />
+
+      </Routes >
+    </Suspense >
   );
 };
 

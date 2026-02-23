@@ -32,6 +32,7 @@ const ResetPassword = () => {
   // Get auth state from Redux
   const { status, error } = useSelector((state) => state.auth);
 
+
   const username = location.state?.username;
   const email = localStorage.getItem("resetEmail");
 

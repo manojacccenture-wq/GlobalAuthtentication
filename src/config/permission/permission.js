@@ -1,4 +1,6 @@
 export const PERMISSIONS = {
+    PUBLIC: 'PUBLIC',
+
   // Dashboard
   VIEW_DASHBOARD: 'VIEW_DASHBOARD',
 

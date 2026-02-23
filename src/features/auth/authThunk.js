@@ -51,9 +51,9 @@ export const logoutAsync = createAsyncThunk(
 
 export const requestPasswordResetAsync = createAsyncThunk(
   'auth/requestPasswordReset',
-  async (email, { rejectWithValue }) => {
+  async (identifier, { rejectWithValue }) => {
     try {
-      const response = await authService.requestPasswordReset(email);
+      const response = await authService.requestPasswordReset(identifier);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -6,7 +6,7 @@ let mockUsers = [
     username: 'super.admin',
     userName: 'Super Admin',
     email: 'super.admin@example.com',
-    phone: '+91 90000 00001',
+    phone: '+919087397440',
     role: 'superadmin',
     vendor: 'Vendor1',
     status: 'active',

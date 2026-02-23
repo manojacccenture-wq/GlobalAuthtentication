@@ -47,6 +47,7 @@ export const menuConfig = [
     id: 'logout',
     label: 'Log Out',
     path: '/logout',
-    permission: null, // always visible
+     permission: PERMISSIONS.PUBLIC,
+
   },
 ];
