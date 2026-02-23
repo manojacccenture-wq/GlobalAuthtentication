@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Input from "../../../shared/components/UI/Input/Input";
 import Button from "../../../shared/components/UI/Button/Button";
-import { requestPasswordResetAsync, clearError } from "../authSlice";
+import {  clearError } from "../authSlice";
+import {requestPasswordResetAsync} from "../authThunk"
 
 //  Username validation (ADM-001 format)
 const forgotPasswordSchema = z.object({

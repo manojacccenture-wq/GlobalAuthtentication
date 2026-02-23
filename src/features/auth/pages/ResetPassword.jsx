@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import PasswordStrengthInput from "../../../shared/components/UI/PasswordStrengthInput/PasswordStrengthInput";
 import Input from "../../../shared/components/UI/Input/Input";
 import Button from "../../../shared/components/UI/Button/Button";
-import { resetPasswordAsync, clearError } from "../authSlice";
+import {  clearError } from "../authSlice";
+import { resetPasswordAsync } from "../authThunk";
 
 // Validation
 const resetSchema = z
