@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../../../shared/components/Modal/Modal';
 import PasswordForm from './common/PasswordForm';
-import { showToast } from '../../../../app/store/slices/toastSlice';
+import { showToast } from '../../../../shared/components/Toast/api/toastSlice';
 import { resetPasswordSchema } from './validation/userSchemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

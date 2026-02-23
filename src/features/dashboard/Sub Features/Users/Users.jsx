@@ -15,7 +15,7 @@ import total_user from "../../../../assets/Images/Page_Image/Dashboard/User/Tota
 import { useListView } from './hooks/useListView';
 import { useUserLoading, useUsers } from './hooks/useUserHooks';
 
-import { showToast } from '../../../../app/store/slices/toastSlice';
+import { showToast } from '../../../../shared/components/Toast/api/toastSlice';
 
 import { userManagementConfig } from './config/config';
 import { fetchUsers,deleteUser } from './usersThunks';

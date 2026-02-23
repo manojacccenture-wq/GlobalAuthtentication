@@ -8,7 +8,7 @@ import PersonalDetailsStep from './steps/PersonalDetailsStep';
 import CreatePasswordStep from './steps/CreatePasswordStep';
 import Button from '../../../../shared/components/UI/Button/Button';
 
-import { showToast } from '../../../../app/store/slices/toastSlice';
+import { showToast } from '../../../../shared/components/Toast/api/toastSlice';
 import { createUserSchema } from './validation/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createUser } from './usersThunks';
