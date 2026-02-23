@@ -8,7 +8,8 @@ import Checkbox from "../../../shared/components/UI/CheckBox/Checkbox";
 import PasswordStrengthInput from "../../../shared/components/UI/PasswordStrengthInput/PasswordStrengthInput";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { registerAsync, clearError } from "../authSlice";
+import {  clearError } from "../authSlice";
+import {registerAsync} from "../authThunk"
 
 const SignUp = () => {
 
