@@ -5,7 +5,7 @@ import {
   selectError,
   selectSuccessMessage,
   selectPagination,
-} from '../slices/userSlice';
+} from '../userSlice';
 
 /**
  * Custom hook to get all users from Redux state

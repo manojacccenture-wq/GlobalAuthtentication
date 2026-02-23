@@ -7,10 +7,11 @@ import SelectVendorStep from './steps/SelectVendorStep';
 import PersonalDetailsStep from './steps/PersonalDetailsStep';
 import CreatePasswordStep from './steps/CreatePasswordStep';
 import Button from '../../../../shared/components/UI/Button/Button';
-import { createUser } from '../../../../app/store/slices/userSlice';
+
 import { showToast } from '../../../../app/store/slices/toastSlice';
 import { createUserSchema } from './validation/userSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createUser } from './usersThunks';
 
 const AddUserModal = ({ isOpen = false, onClose = () => { } }) => {
   const dispatch = useDispatch();

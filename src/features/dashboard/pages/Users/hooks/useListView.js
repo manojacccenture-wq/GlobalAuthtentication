@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useUsers } from '../../../../../app/store/hooks/useUserHooks';
+import { useUsers } from './useUserHooks';
 
 export const useListView = (initialData = []) => {
   const reduxUsers = useUsers();

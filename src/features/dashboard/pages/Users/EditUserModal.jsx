@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Modal from '../../../../shared/components/Modal/Modal';
 import PersonalDetailsForm from './common/PersonalDetailsForm';
-import { updateUser } from '../../../../app/store/slices/userSlice';
+
 import { showToast } from '../../../../app/store/slices/toastSlice';
 import { editUserSchema } from './validation/userSchemas';
 import Button from '../../../../shared/components/UI/Button/Button';
+import { updateUser } from './usersThunks';
 
 const EditUserModal = ({
   isOpen = false,
