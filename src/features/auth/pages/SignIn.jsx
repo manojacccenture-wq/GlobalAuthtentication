@@ -8,7 +8,8 @@ import Button from '../../../shared/components/UI/Button/Button';
 import Checkbox from '../../../shared/components/UI/CheckBox/Checkbox';
 import { useForm } from 'react-hook-form';
 import { signInSchema } from '../schemas/auth.schema';
-import { loginAsync,clearError } from '../authSlice';
+import { loginAsync } from '../authThunk';
+import { clearError } from '../authSlice';
 
 
 
