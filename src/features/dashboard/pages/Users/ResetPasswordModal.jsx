@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../../../shared/components/Modal/Modal';
 import PasswordForm from './common/PasswordForm';
-import { resetPassword } from '../../../../app/store/slices/userSlice';
 import { showToast } from '../../../../app/store/slices/toastSlice';
 import { resetPasswordSchema } from './validation/userSchemas';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Button from '../../../../shared/components/UI/Button/Button';
+import { resetPassword } from './usersThunks';
 
 const ResetPasswordModal = ({
   isOpen = false,

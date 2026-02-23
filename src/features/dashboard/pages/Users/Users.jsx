@@ -13,11 +13,12 @@ import ConfirmModal from '../../../../shared/components/ConfirmModal/ConfirmModa
 import total_user from "../../../../assets/Images/Page_Image/Dashboard/User/Total_User.png"
 
 import { useListView } from './hooks/useListView';
-import { useUserLoading, useUsers } from '../../../../app/store/hooks/useUserHooks';
-import { fetchUsers, deleteUser } from '../../../../app/store/slices/userSlice';
+import { useUserLoading, useUsers } from './hooks/useUserHooks';
+
 import { showToast } from '../../../../app/store/slices/toastSlice';
 
 import { userManagementConfig } from './config/config';
+import { fetchUsers,deleteUser } from './usersThunks';
 
 const Users = () => {
   const dispatch = useDispatch();
