@@ -7,7 +7,6 @@ export const getPermissionsByRole = (role) => {
 };
 
 export const hasPermission = (role, permission) => {
-  console.log('permission: ', permission)
   // Always allow PUBLIC routes
   if (permission === PERMISSIONS.PUBLIC) return true;
   const permissions = getPermissionsByRole(role);

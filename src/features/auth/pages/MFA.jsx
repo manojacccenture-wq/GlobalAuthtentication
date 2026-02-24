@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import Input from "../../../shared/components/UI/Input/Input";
 import Button from "../../../shared/components/UI/Button/Button";
 import { clearError } from "../authSlice";
-import {verifyMfaAsync} from "../authThunk"
+import { verifyMfaAsync } from "../authThunk"
+import { maskEmail } from "../../../utils/Helper Function/helper";
 
 
 const MFA = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // Get auth state from Redux
   const { status, error, mfaPending, user } = useSelector((state) => state.auth);
+
+  const [timer, setTimer] = useState(60);
+
 
   const {
     register,
@@ -35,16 +39,35 @@ const MFA = () => {
     }
   }, [mfaPending, user, status, navigate]);
 
+
+  const startTimer = () => {
+    let count = 60;
+    setTimer(count);
+
+    const interval = setInterval(() => {
+      count -= 1;
+      setTimer(count);
+
+      if (count <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    startTimer();
+  }, []);
+
   const onSubmit = async (data) => {
     // Clear previous errors
     dispatch(clearError());
-    
+
     // Dispatch verify MFA async thunk
     try {
       await dispatch(verifyMfaAsync(data.otp)).unwrap();
     } catch (err) {
       // Error is handled by Redux slice
-      console.error('MFA verification failed:', err);
+
     }
   };
 
@@ -57,7 +80,7 @@ const MFA = () => {
         </h2>
 
         <p className="text-center text-xs sm:text-sm text-gray-500 mb-2">
-          OTP sent to <span className="font-medium">{email}</span>
+          OTP sent to <span>{maskEmail(email)}</span>
         </p>
 
         <p className="text-center text-xs sm:text-sm text-gray-500 mb-6 sm:mb-8">
@@ -74,19 +97,20 @@ const MFA = () => {
 
           <Input
             type="text"
-            placeholder="Enter 6 digit OTP"
+            inputMode="numeric"
+            maxLength={6}
+            formatter={(value) => value.replace(/\D/g, '').slice(0, 6)}
             error={!!errors.otp}
             helperText={errors.otp?.message}
             {...register("otp", {
               required: "OTP is required",
-              minLength: {
-                value: 6,
+              pattern: {
+                value: /^[0-9]{6}$/,
                 message: "OTP must be 6 digits"
               }
             })}
             disabled={isLoading}
           />
-
           <Button
             type="submit"
             variant="primary"
@@ -95,6 +119,16 @@ const MFA = () => {
             disabled={isLoading}
           >
             {isLoading ? "Verifying..." : "Verify OTP"}
+          </Button>
+
+          <Button disabled={timer > 0}
+            variant="outlinePrimary"
+            onClick={() => {
+              startTimer();
+              // dispatch resend action here
+            }}
+          >
+            {timer > 0 ? `Resend in ${timer}s` : "Resend OTP"}
           </Button>
 
         </form>

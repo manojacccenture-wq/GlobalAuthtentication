@@ -17,7 +17,7 @@ const SignIn = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // Get auth state from Redux
   const { status, error, user, mfaPending } = useSelector((state) => state.auth);
 
@@ -36,6 +36,9 @@ const SignIn = () => {
       rememberMe: false,
     },
   });
+
+  const password = watch("password", "");
+  const username = watch("username", "");
 
   const rememberMe = watch("rememberMe");
   const isLoading = status === 'loading';
@@ -56,7 +59,7 @@ const SignIn = () => {
   const onSubmit = async (data) => {
     // Clear previous errors
     dispatch(clearError());
-    
+
     // Dispatch login async thunk
     try {
       await dispatch(loginAsync({
@@ -65,7 +68,6 @@ const SignIn = () => {
       })).unwrap();
     } catch (err) {
       // Error is handled by Redux slice
-      console.error('Login failed:', err);
     }
   };
 
@@ -73,95 +75,108 @@ const SignIn = () => {
     navigate("/forgotPassword");
   }
 
-return (
-  <div className="min-h-screen bg-white grid place-items-center px-4 sm:px-6 lg:px-8">
+  return (
+    <div className="min-h-screen bg-white grid place-items-center px-4 sm:px-6 lg:px-8">
 
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xs flex flex-col">
+      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xs flex flex-col">
 
-      <div className="flex items-center justify-center gap-1.5 mb-6 sm:mb-8">
-        <svg
-          className="w-[46px] h-[46px]"
-          viewBox="0 0 46 46"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect width="46" height="46" fill="#dbc5c517" rx="8" alt="App Logo" />
-        </svg>
-        <p className="font-extrabold text-base text-text-primary">
-          Your App Name
-        </p>
-      </div>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-          {error}
+        <div className="flex items-center justify-center gap-1.5 mb-6 sm:mb-8">
+          <svg
+            className="w-[46px] h-[46px]"
+            viewBox="0 0 46 46"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="46" height="46" fill="#dbc5c517" rx="8" alt="App Logo" />
+          </svg>
+          <p className="font-extrabold text-base text-text-primary">
+            Your App Name
+          </p>
         </div>
-      )}
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="flex flex-col gap-5 mb-6">
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+            {error}
+          </div>
+        )}
 
-          <Input
-            type="text"
-            placeholder="ADM-001"
-            error={!!errors.username}
-            helperText={errors.username?.message}
-            {...register("username")}
-            onChange={(e) =>
-              setValue("username", e.target.value.toUpperCase())
-            }
-            disabled={isLoading}
-          />
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="flex flex-col gap-5 mb-6">
 
-          <Input
-            type="password"
-            placeholder="Password"
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            {...register("password")}
-            disabled={isLoading}
-          />
-
-          <div className="flex gap-3 items-center">
-            <Checkbox
-              checked={rememberMe}
-              label="Remember me"
-              onChange={(checked) => setValue("rememberMe", checked)}
-              {...register("rememberMe")}
+            <Input
+              type="text"
+              placeholder="ADM-001"
+              error={!!errors.username}
+              helperText={errors.username?.message}
+              {...register("username")}
+              onChange={(e) =>
+                setValue("username", e.target.value.toUpperCase())
+              }
               disabled={isLoading}
             />
+
+            <Input
+              type="password"
+              placeholder="New Password"
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 10,
+                  message: "Password must be at least 10 characters"
+                },
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#]).{10,}$/,
+                  message:
+                    "Must include uppercase, lowercase, number and special character"
+                },
+                validate: (value) =>
+                  !value.toLowerCase().includes(username?.toLowerCase()) ||
+                  "Password should not contain username"
+              })}
+            />
+
+            <div className="flex gap-3 items-center">
+              <Checkbox
+                checked={rememberMe}
+                label="Remember me"
+                onChange={(checked) => setValue("rememberMe", checked)}
+                {...register("rememberMe")}
+                disabled={isLoading}
+              />
+            </div>
+
           </div>
 
-        </div>
+          <div className="flex flex-col gap-3">
 
-        <div className="flex flex-col gap-3">
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="md"
-            disabled={isLoading}
-            className="w-full"
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </Button>
-
-          <p className="font-normal text-[#3a3f51] text-center text-sm sm:text-base">
-            <a
-              href="#"
-              className="text-text-primary hover:underline"
-              onClick={handleNavigateForgotPassword}
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              disabled={isLoading}
+              className="w-full"
             >
-              Forgot password?
-            </a>
-          </p>
+              {isLoading ? "Signing In..." : "Sign In"}
+            </Button>
 
-        </div>
-      </form>
+            <p className="font-normal text-[#3a3f51] text-center text-sm sm:text-base">
+              <a
+                href="#"
+                className="text-text-primary hover:underline"
+                onClick={handleNavigateForgotPassword}
+              >
+                Forgot password?
+              </a>
+            </p>
 
+          </div>
+        </form>
+
+      </div>
     </div>
-  </div>
-);
+  );
 
 };
 

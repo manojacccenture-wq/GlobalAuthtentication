@@ -123,10 +123,8 @@ export const requestPasswordReset = (identifier) =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
       const normalized = identifier.trim().toLowerCase();
-      console.log('normalized: ', normalized)
 
       const user = testUsers.find((u) => {
-        console.log('u: ', u)
         return (
           u.email?.toLowerCase() === normalized ||
           u.username?.toLowerCase() === normalized ||
